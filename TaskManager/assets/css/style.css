@@ -1,0 +1,11 @@
+i {
+    color: red;
+}
+
+.date{
+    display: none;
+}
+
+#dropdownMenu2, input[type=submit]{
+    color: aliceblue !important;
+}

@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let objectStore = DB.createObjectStore('tasks', {
             keyPath: 'id',
+            // date: "date",
             autoIncrement: true
         });
         objectStore.createIndex('taskName', 'taskName', {
@@ -51,8 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        let d = new Date()
+
         let newTask = {
             taskName: taskInput.value,
+            date: d
         }
 
         let transaction = DB.transaction(['tasks'], 'readwrite');
@@ -99,7 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="edit.html?id=${cursor.value.id}"><i class="fa fa-edit"></i> </a>
                 `;
 
+                const date = document.createElement('a');
+                date.className = "date"
+                date.innerHTML = cursor.value.date
+
                 li.appendChild(link);
+                li.appendChild(date)
 
                 taskList.appendChild(li);
                 cursor.continue();
@@ -122,14 +131,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 transaction.oncomplete = () => {
                     e.target.parentElement.parentElement.remove();
                 }
-
-
-                
             }
         }
     }
 
+    clearBtn.addEventListener('click', () => {
+        if (confirm('Are You Sure?')) {
+            indexedDB.deleteDatabase('tasks')
+            while (taskList.firstChild) {
+                taskList.removeChild(taskList.firstChild)
+            }
 
+            window.location.reload()
+        }
+    })
 
+    reloadIcon.addEventListener('click', () => {
+        location.reload()
+    })
 
+    filter.addEventListener('keyup', (e) => {
+        const searchInput = e.target.value.toLowerCase();
+        const listItems = taskList.getElementsByTagName('li');
+        Array.from(listItems).forEach((listItem) => {
+            const listItemTextContext = listItem.textContent;
+            if (listItemTextContext.toLowerCase().indexOf(searchInput) != -1) {
+                listItem.style.display = 'block';
+            } else listItem.style.display = 'none';
+        })
+    })
+
+    sortA.addEventListener('click', () => {
+        var listContainer, i, switching, listElements, shouldSwitch;
+        listContainer = document.getElementById("collection");
+        switching = true;
+        while (switching) {
+            switching = false;
+            listElements = listContainer.getElementsByTagName("LI");
+            for (i = 0; i < (listElements.length - 1); i++) {
+                shouldSwitch = false;
+    
+                if (listElements[i].lastChild.textContent.toLowerCase() > listElements[i + 1].lastChild.textContent.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                listElements[i].parentNode.insertBefore(listElements[i + 1], listElements[i]);
+                switching = true;
+            }
+        }
+    })
+
+    sortD.addEventListener('click', () => {
+        var listContainer, i, switching, listElements, shouldSwitch;
+        listContainer = document.getElementById("collection");
+        switching = true;
+        while (switching) {
+            switching = false;
+            listElements = listContainer.getElementsByTagName("LI");
+            for (i = 0; i < (listElements.length - 1); i++) {
+                shouldSwitch = false;
+    
+                if (listElements[i].lastChild.textContent.toLowerCase() < listElements[i + 1].lastChild.textContent.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                listElements[i].parentNode.insertBefore(listElements[i + 1], listElements[i]);
+                switching = true;
+            }
+        }
+    })
 });

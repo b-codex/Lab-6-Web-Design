@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let TasksDB = indexedDB.open('tasks', 1);
 
     // if there's an error
-    TasksDB.onerror = function() {
-            console.log('There was an error');
-        }
-        // if everything is fine, assign the result to the instance
-    TasksDB.onsuccess = function() {
+    TasksDB.onerror = function () {
+        console.log('There was an error');
+    }
+    // if everything is fine, assign the result to the instance
+    TasksDB.onsuccess = function () {
         // console.log('Database Ready');
 
         // save the result
@@ -35,16 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
         var objectStore = transaction.objectStore('tasks');
         var request = objectStore.get(id);
 
-        request.onsuccess = function(event) {
+        request.onsuccess = function (event) {
             if (request.result) {
-                taskInput.value = request.result.taskname;
+                taskInput.value = request.result.taskName;
 
             } else {
                 console.log('No data record');
             }
         };
 
-        request.onerror = function(event) {
+        request.onerror = function (event) {
             console.log('Transaction failed');
         };
 
@@ -71,6 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
         2. Use the id on put method of index db
         
         */
+
+        let transaction = DB.transaction(['tasks'], 'readwrite');
+        let objectStore = transaction.objectStore('tasks');
+
+        // let x = objectStoreTitle = objectStore.get(taskInput.value)
+        let request = objectStore.put({taskName:taskInput.value, date: new Date(), id: id})
+        console.log(request);
+
+        request.onsuccess = function (e) {
+            console.log('hooray');
+        }
 
         history.back();
     }

@@ -75,9 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let transaction = DB.transaction(['tasks'], 'readwrite');
         let objectStore = transaction.objectStore('tasks');
 
-        // let x = objectStoreTitle = objectStore.get(taskInput.value)
         let request = objectStore.put({taskName:taskInput.value, date: new Date(), id: id})
-        console.log(request);
+        // console.log(request);
 
         request.onsuccess = function (e) {
             console.log('hooray');

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tasksDB.onsuccess = function () {
         console.log('Database Ready')
-        DB = tasksDB.result
+        DB = tasksDB.result 
 
         displayTaskList();
     }
@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
             autoIncrement: true
         });
         objectStore.createIndex('taskName', 'taskName', {
+            unique: false
+        });
+        objectStore.createIndex('date', 'date', {
             unique: false
         });
         console.log('Database Ready & Fields Created!');
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 date.innerHTML = cursor.value.date
 
                 li.appendChild(link);
-                li.appendChild(date)
+                // li.appendChild(date)
 
                 taskList.appendChild(li);
                 cursor.continue();
@@ -171,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (i = 0; i < (listElements.length - 1); i++) {
                 shouldSwitch = false;
     
-                if (listElements[i].lastChild.textContent.toLowerCase() > listElements[i + 1].lastChild.textContent.toLowerCase()) {
+                if (listElements[i].textContent > listElements[i + 1].textContent) {
                     shouldSwitch = true;
                     break;
                 }
@@ -193,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (i = 0; i < (listElements.length - 1); i++) {
                 shouldSwitch = false;
     
-                if (listElements[i].lastChild.textContent.toLowerCase() < listElements[i + 1].lastChild.textContent.toLowerCase()) {
+                if (listElements[i].textContent < listElements[i + 1].textContent) {
                     shouldSwitch = true;
                     break;
                 }
